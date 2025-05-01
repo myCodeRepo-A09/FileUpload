@@ -1,0 +1,34 @@
+<div class="upload-container">
+    <div class="upload-area" (drop)="onDrop($event)" (dragover)="onDragOver($event)">
+        <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;" />
+        <button (click)="fileInput.click()" class="upload-button">Select File</button>
+        <p>or drag and drop files here</p>
+    </div>
+
+    <div *ngIf="selectedFile" class="file-info">
+        <p>Selected File: {{ selectedFile.name }}</p>
+        <p>Size: {{ selectedFile.size | fileSize }}</p>
+        <button (click)="uploadFile()" [disabled]="uploading" class="upload-button">
+            {{ uploading ? 'Uploading...' : 'Upload' }}
+        </button>
+    </div>
+
+    <div *ngIf="uploading" class="progress-container">
+        <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+        <p>{{ progress }}%</p>
+    </div>
+
+    <div *ngIf="uploadComplete" class="success-message">
+        <p>Upload complete!</p>
+        <div *ngIf="isVideoFile">
+            <video controls width="400" *ngIf="videoUrl">
+                <source [src]="videoUrl" [type]="videoType">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+        <p>{{ error }}</p>
+    </div>
+</div>
