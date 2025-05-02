@@ -9,7 +9,13 @@ const streamRoute = require("./routes/streamRoutes");
 const errorMiddleware = require("./middlewares/errorMiddleware");
 const config = require("../server/utils/config");
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:4200", // Replace with your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"], // Allow streaming requests
+    exposedHeaders: ["Content-Range"],
+  })
+);
 app.use(helmet());
 app.use(compression());
 app.use(express.json());
@@ -22,8 +28,8 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.use("/api/upload", uploadRoute);
-app.use("/api/stream", streamRoute);
+app.use("/upload", uploadRoute);
+app.use("/stream", streamRoute);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "OK" });

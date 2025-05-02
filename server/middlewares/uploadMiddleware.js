@@ -1,6 +1,6 @@
 const multer = require("multer");
 const path = require("path");
-const { ApiError } = require("../utils/helpers");
+const ApiError = require("../utils/helpers");
 
 // Configure storage
 const storage = multer.diskStorage({

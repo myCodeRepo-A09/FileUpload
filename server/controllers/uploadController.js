@@ -1,6 +1,5 @@
-const { uploadMiddleware } = require("../middlewares/uploadMiddleware");
 const FileService = require("../services/fileService");
-const { ApiError } = require("../utils/helpers");
+const ApiError = require("../utils/helpers");
 
 //   private fileService: FileService;
 
@@ -9,7 +8,7 @@ const { ApiError } = require("../utils/helpers");
 //   }
 
 const uploadFile = async function (req, res, next) {
-  uploadMiddleware(req, res, next);
+  // (req, res, next);
   try {
     if (!req.file) {
       throw new ApiError(400, "No file uploaded");
@@ -22,6 +21,7 @@ const uploadFile = async function (req, res, next) {
       filePath: filePath,
     });
   } catch (error) {
+    console.log("error", error);
     next(error);
   }
 };

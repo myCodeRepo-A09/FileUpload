@@ -2,12 +2,12 @@ import { HttpEventType } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import {UploadService} from '../../services/upload.service';
 import { NgModule } from '@angular/core';
-
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FileSizePipe } from '../../pipes/file-size.pipe';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-file-upload',
-  imports: [NgModule,MatProgressBarModule],
+  imports: [CommonModule,MatProgressBarModule,FileSizePipe],
   templateUrl: './file-upload.component.html',
   styleUrl: './file-upload.component.scss'
 })
@@ -22,6 +22,7 @@ export class FileUploadComponent {
   videoUrl: string | null = null;
   videoType = '';
   isVideoFile = false;
+  isImageFile=false;
 
   constructor(private uploadService: UploadService) {}
 
@@ -47,6 +48,7 @@ export class FileUploadComponent {
     this.resetState();
     this.selectedFile = file;
     this.isVideoFile = file.type.startsWith('video/');
+    this.isImageFile=file.type.startsWith('image/');
   }
 
   uploadFile(): void {
@@ -64,7 +66,7 @@ export class FileUploadComponent {
           this.uploadComplete = true;
           this.uploading = false;
           if (this.isVideoFile && event.body?.filePath) {
-            this.videoUrl = `/api/stream/${event.body.filePath}`;
+            this.videoUrl = `http://localhost:3000/stream/${event.body.filePath}`;
             this.videoType = this.selectedFile?.type || '';
           }
         }

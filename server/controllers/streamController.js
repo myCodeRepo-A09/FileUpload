@@ -4,7 +4,8 @@ const { ApiError } = require("../utils/helpers");
 
 const streamFile = async (req, res, next) => {
   try {
-    const filePath = req.params[0]; // Changed to catch all segments
+    const filePath = req.params.filePath;
+    /// Changed to catch all segments
     const fullPath = path.join(process.cwd(), "uploads", filePath);
 
     if (!fs.existsSync(fullPath)) {
@@ -26,6 +27,10 @@ const streamFile = async (req, res, next) => {
         "Accept-Ranges": "bytes",
         "Content-Length": chunksize,
         "Content-Type": "video/mp4",
+        "Access-Control-Allow-Origin": "http://localhost:4200",
+        "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
+        "Access-Control-Expose-Headers": "Content-Range",
+        "Cross-Origin-Resource-Policy": "cross-origin", // ✅ This is the fix
       };
 
       res.writeHead(206, head);
@@ -34,6 +39,10 @@ const streamFile = async (req, res, next) => {
       const head = {
         "Content-Length": fileSize,
         "Content-Type": "video/mp4",
+        "Access-Control-Allow-Origin": "http://localhost:4200",
+        "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
+        "Access-Control-Expose-Headers": "Content-Range",
+        "Cross-Origin-Resource-Policy": "cross-origin", // ✅ This is the fix
       };
       res.writeHead(200, head);
       fs.createReadStream(fullPath).pipe(res);

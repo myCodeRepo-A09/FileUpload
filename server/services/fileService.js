@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const { promisify } = require("util");
-const { ApiError } = require("../utils/helpers");
+const ApiError = require("../utils/helpers");
 
 const writeFileAsync = promisify(fs.writeFile);
 const unlinkAsync = promisify(fs.unlink);
@@ -18,9 +18,11 @@ const FileService = {
   saveFile: async function (file) {
     this.uploadDir = path.join(process.cwd(), "uploads");
     this.ensureUploadDirExists();
+
     try {
       const filePath = path.join(this.uploadDir, file.filename);
-      await writeFileAsync(filePath, file.buffer);
+      console.log(filePath);
+      //await writeFileAsync(filePath, file.buffer);
       return file.filename;
     } catch (error) {
       throw new ApiError(500, "Failed to save file");
