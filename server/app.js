@@ -8,6 +8,8 @@ const uploadRoute = require("./routes/uploadRoutes");
 const streamRoute = require("./routes/streamRoutes");
 const errorMiddleware = require("./middlewares/errorMiddleware");
 const config = require("../server/utils/config");
+
+const imageRoute = require("./routes/imageRoutes");
 const app = express();
 app.use(
   cors({
@@ -29,6 +31,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use("/upload", uploadRoute);
+app.use("/image", imageRoute);
 app.use("/stream", streamRoute);
 
 app.get("/health", (req, res) => {

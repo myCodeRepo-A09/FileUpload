@@ -10,11 +10,11 @@ const ApiError = require("../utils/helpers");
 const uploadFile = async function (req, res, next) {
   // (req, res, next);
   try {
-    if (!req.file) {
+    if (!req.file && !req.files) {
       throw new ApiError(400, "No file uploaded");
     }
 
-    const filePath = await FileService.saveFile(req.file);
+    const filePath = await FileService.saveFile(req.file || req.files[0]);
 
     res.status(201).json({
       message: "File uploaded successfully",

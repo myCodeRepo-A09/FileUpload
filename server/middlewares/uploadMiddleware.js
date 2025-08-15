@@ -5,7 +5,7 @@ const ApiError = require("../utils/helpers");
 // Configure storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = path.join(process.cwd(), "uploads");
+    const uploadDir = path.join(__dirname, "../uploads");
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
@@ -35,12 +35,14 @@ const upload = multer({
     fileSize: 1024 * 1024 * 100, // 100MB limit
   },
   fileFilter: fileFilter,
-}).single("file");
+}).array("file", 5);
 
 // Middleware function
 const uploadMiddleware = (req, res, next) => {
   upload(req, res, (err) => {
+    console.log(req.file);
     if (err) {
+      console.log(err);
       if (err instanceof multer.MulterError) {
         if (err.code === "LIMIT_FILE_SIZE") {
           return next(

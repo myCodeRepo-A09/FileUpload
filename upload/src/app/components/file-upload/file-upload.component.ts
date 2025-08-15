@@ -21,6 +21,8 @@ export class FileUploadComponent {
   error: string | null = null;
   videoUrl: string | null = null;
   videoType = '';
+  imageUrl: string | null = null;
+  imageType = '';
   isVideoFile = false;
   isImageFile=false;
 
@@ -68,6 +70,19 @@ export class FileUploadComponent {
           if (this.isVideoFile && event.body?.filePath) {
             this.videoUrl = `http://localhost:3000/stream/${event.body.filePath}`;
             this.videoType = this.selectedFile?.type || '';
+          }
+          else if(this.isImageFile && event.body?.filePath){
+            this.uploadService.getImageFile(event.body.filePath).subscribe({
+              next:(file:any)=>{
+                this.imageUrl=file
+                
+              },
+              error: (err:any) => {
+                this.error = err.message || 'get image failed';
+                this.uploading = false;
+              }
+            })
+            
           }
         }
       },
